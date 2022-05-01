@@ -1,0 +1,12 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = true
+
+[character]
+success_symbol = "[➜](bold green)"
+error_symbol = "[➜](bold red)"
+vicmd_symbol = "[➜](bold white)"
+
+# Disable the package module, hiding it from the prompt completely
+[package]
+disabled = true

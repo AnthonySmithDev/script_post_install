@@ -218,3 +218,4 @@ function setup_git {
   git config --global user.email "anthonyasdeveloper@gmail.com"
 }
 lib::setup "Git" "git" setup_git
+
