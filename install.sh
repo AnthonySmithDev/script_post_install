@@ -5,6 +5,13 @@ source "src/lib.sh"
 function apt_install {
   sudo apt install -y $1
 }
+function set_alias() {
+	echo "alias $1='$2'" >>~/.zshrc
+}
+
+function set_var() {
+	echo "export $1=$2" >>~/.zshrc
+}
 
 function setup_zsh {
 	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
@@ -26,46 +33,29 @@ function install_zsh {
 }
 lib::install "ZSH" "zsh" install_zsh
 
-function setup_starship {
-	starship_config="$HOME/.config/starship.toml"
-	
-	echo 'eval "$(starship init zsh)"' >> ~/.zshrc
-	cp "./config/starship.toml" "$starship_config"
-}
 function install_starship {
 	curl -sS https://starship.rs/install.sh | sh
+
+  setup_starship() {
+  	starship_config="$HOME/.config/starship.toml"
+	
+  	echo 'eval "$(starship init zsh)"' >> ~/.zshrc
+  	cp "./config/starship.toml" "$starship_config"
+  }
   lib::setup "Oh My Zsh" "zsh" setup_starship
 }
 lib::install "Starship" "starship" install_starship
 
-function setup_zoxide {
-	echo 'eval "$(zoxide init zsh)"' >> ~/.zshrc
-	echo 'export PATH="/home/anthony/.local/bin:$PATH"' >> ~/.zshrc
-}
 function install_zoxide {
 	curl -sS https://webinstall.dev/zoxide | bash
+
+  setup_zoxide() {
+  	echo 'eval "$(zoxide init zsh)"' >> ~/.zshrc
+  	echo 'export PATH="/home/anthony/.local/bin:$PATH"' >> ~/.zshrc
+  }
   lib::setup "Zoxide" "zoxide" setup_zoxide
 }
 lib::install "Zoxide" "zoxide" install_zoxide
-
-function install_flatpak {
-  apt_install flatpak
-  apt_install gnome-software-plugin-flatpak -y
-  flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-}
-lib::install "Flatpak" "flatpak"
-
-function tools_flatpak {
-  flatpak install flathub com.google.Chrome
-  flatpak install flathub com.brave.Browser
-
-  flatpak install flathub us.zoom.Zoom
-  flatpak install flathub com.microsoft.Teams
-  flatpak install flathub com.discordapp.Discord
-
-  flatpak install flathub com.usebottles.bottles
-}
-lib::tool "Flatpak Tools" "flatpak" tools_flatpak
 
 function install_regolith {
 	# Register the Regolith public key to your local apt:
@@ -129,8 +119,12 @@ function tools_golang {
   go_dev() {
   	go install golang.org/x/tools/gopls@latest
   	go install github.com/go-delve/delve/cmd/dlv@latest
-  	go install github.com/jesseduffield/lazydocker@latest
+
   	go install github.com/jesseduffield/lazygit@latest
+  	go install github.com/jesseduffield/lazydocker@latest
+
+    set_alias "lazygit" "lzg"
+    set_alias "lazydocker" "lzd"
   }
   lib::pack "Golang Dev" go_dev
 
@@ -177,6 +171,25 @@ function tools_rust {
   lib::pack "Rust Others" rust_others
 }
 lib::tool "Rust Tools" "cargo" tools_rust
+
+function install_flatpak {
+  apt_install flatpak
+  apt_install gnome-software-plugin-flatpak
+  flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+}
+lib::install "Flatpak" "flatpak"
+
+function tools_flatpak {
+  flatpak install flathub com.google.Chrome
+  flatpak install flathub com.brave.Browser
+
+  flatpak install flathub us.zoom.Zoom
+  flatpak install flathub com.microsoft.Teams
+  flatpak install flathub com.discordapp.Discord
+
+  flatpak install flathub com.usebottles.bottles
+}
+lib::tool "Flatpak Tools" "flatpak" tools_flatpak
 
 function install_helix {
 	cargo_bin="$HOME/.cargo/bin"
