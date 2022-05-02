@@ -30,6 +30,7 @@ function setup_zsh {
 function install_zsh {
   apt_install "zsh"
   lib::setup "Oh My Zsh" "zsh" setup_zsh
+	sudo reboot
 }
 lib::install "ZSH" "zsh" install_zsh
 
@@ -90,6 +91,8 @@ lib::install "NodeJS" "node" install_nodejs
 
 function tools_nodejs {
 	npm install -g httpyac
+	npm install -g gitmoji-cli
+	npm install -g bash-language-server
 }
 lib::tool "NodeJS Tools" "npm" tools_nodejs
 
@@ -123,8 +126,8 @@ function tools_golang {
   	go install github.com/jesseduffield/lazygit@latest
   	go install github.com/jesseduffield/lazydocker@latest
 
-    set_alias "lazygit" "lzg"
-    set_alias "lazydocker" "lzd"
+    set_alias "lzg" "lazygit"
+    set_alias "lzd" "lazydocker"
   }
   lib::pack "Golang Dev" go_dev
 
@@ -177,7 +180,7 @@ function install_flatpak {
   apt_install gnome-software-plugin-flatpak
   flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 }
-lib::install "Flatpak" "flatpak"
+lib::install "Flatpak" "flatpak" install_flatpak
 
 function tools_flatpak {
   flatpak install flathub com.google.Chrome
@@ -188,6 +191,7 @@ function tools_flatpak {
   flatpak install flathub com.discordapp.Discord
 
   flatpak install flathub com.usebottles.bottles
+	flatpak install flathub org.videolan.VLC
 }
 lib::tool "Flatpak Tools" "flatpak" tools_flatpak
 
@@ -231,4 +235,13 @@ function setup_git {
   git config --global user.email "anthonyasdeveloper@gmail.com"
 }
 lib::setup "Git" "git" setup_git
+
+
+function install_github {
+	curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+	echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+	sudo apt update
+	sudo apt install gh
+}
+lib::install "Githu Cli" "gh" install_github
 
