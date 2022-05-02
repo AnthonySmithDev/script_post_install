@@ -34,7 +34,7 @@ lib::setup() {
 		if interaction::prompt_yes_no "Do you want to setup $1" "yes"; then
 			echo "Installing!"
 			($3)
-  		echo "Setup Successfully!"
+			echo "Setup Successfully!"
 		else
 			echo "Skipping!"
 		fi
@@ -49,7 +49,7 @@ lib::tool() {
 		else
 			echo "Skipping!"
 		fi
-  else
+	else
 		echo "$2 command not found!"
 	fi
 }
@@ -63,4 +63,3 @@ lib::pack() {
 		echo "Skipping!"
 	fi
 }
-

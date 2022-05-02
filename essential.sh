@@ -29,8 +29,7 @@ sudo apt install -y xsel xclip wl-clipboard
 echo "Installing SSH Server"
 sudo apt-get install -y openssh-server
 
- #Installing Git
+#Installing Git
 echo "Installing Git"
 sudo add-apt-repository -y ppa:git-core/ppa
 sudo apt install -y git
-
