@@ -150,6 +150,7 @@ lib::install "Rust" "rustup" install_rust
 
 function tools_rust {
 	rust_dev() {
+		cargo install amber
 		cargo install exa
 		cargo install ttyper
 		cargo install fd-find
